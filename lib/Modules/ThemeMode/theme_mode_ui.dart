@@ -36,22 +36,22 @@ class ThemeModeUI extends StatelessWidget {
 
   Expanded buildIconMode(AppCubit cubit, BuildContext context) {
     return Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        cubit.isDark ? Icons.sunny : Icons.dark_mode,
-                        size: 120.0,
-                      ),
-                      const SizedBox(height: 20.0),
-                      Center(
-                        child: Text(
-                          cubit.isDark ? 'Light' : 'Dark',
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                      )
-                    ],
-                  ),
-                );
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            cubit.isDark ? Icons.sunny : Icons.dark_mode,
+            size: 120.0,
+          ),
+          const SizedBox(height: 20.0),
+          Center(
+            child: Text(
+              cubit.isDark ? 'Light' : 'Dark',
+              style: Theme.of(context).textTheme.headline5,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
