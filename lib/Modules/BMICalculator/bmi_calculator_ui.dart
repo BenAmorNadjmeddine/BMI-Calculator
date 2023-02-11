@@ -1,12 +1,13 @@
 import 'package:bmi_calculator/Modules/BMIResults/bmi_results_ui.dart';
-import 'package:bmi_calculator/Shared/Components/ReusableWidgets/gender_button.dart';
 import 'package:bmi_calculator/Shared/Components/ReusableWidgets/my_button.dart';
 import 'package:bmi_calculator/Shared/Cubit/cubit.dart';
 import 'package:bmi_calculator/Shared/Cubit/states.dart';
-import 'package:bmi_calculator/Shared/Styles/colors.dart';
 import 'package:bmi_calculator/Shared/Components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'BMICalculatorUIComponents/gender_choosing.dart';
+import 'BMICalculatorUIComponents/height_slider.dart';
+import 'BMICalculatorUIComponents/weight_and_age.dart';
 
 class BMICalculatorUI extends StatelessWidget {
   const BMICalculatorUI({Key? key}) : super(key: key);
@@ -18,16 +19,17 @@ class BMICalculatorUI extends StatelessWidget {
       builder: (context, state) {
         var cubit = AppCubit.get(context);
         return Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
-                buildGenderChoosing(cubit),
                 const SizedBox(height: 20.0),
-                buildHeightSlider(cubit, context),
+                GenderChoosing(cubit: cubit),
                 const SizedBox(height: 20.0),
-                buildWeightAndHeight(context, cubit),
+                HeightSlider(cubit: cubit, context: context),
+                const SizedBox(height: 20.0),
+                WeightAndAge(cubit: cubit, context: context),
                 const SizedBox(height: 20.0),
                 MyButton(
                   onPressed: () {
@@ -51,134 +53,12 @@ class BMICalculatorUI extends StatelessWidget {
                   },
                   text: 'Calculate',
                 ),
+                const SizedBox(height: 20.0),
               ],
             ),
           ),
         );
       },
-    );
-  }
-
-  Row buildGenderChoosing(AppCubit cubit) {
-    return Row(
-                children: [
-                  Expanded(
-                    child: GenderButton(
-                      onTap: () {
-                        if (!cubit.isGenderChosen) cubit.isGenderChosen = !cubit.isGenderChosen;
-                        cubit.changeGender(true);
-                      },
-                      text: 'Male',
-                      icon: Icons.male,
-                      color: cubit.isGenderChosen
-                          ? cubit.isMale!
-                              ? defaultColor
-                              : cubit.isDark
-                                  ? Colors.black26
-                                  : Colors.grey.shade300
-                          : cubit.isDark
-                              ? Colors.black26
-                              : Colors.grey.shade300,
-                    ),
-                  ),
-                  const SizedBox(width: 20.0),
-                  Expanded(
-                    child: GenderButton(
-                      onTap: () {
-                        if (!cubit.isGenderChosen) cubit.isGenderChosen = !cubit.isGenderChosen;
-                        cubit.changeGender(false);
-                      },
-                      text: 'Female',
-                      icon: Icons.female,
-                      color: cubit.isGenderChosen
-                          ? !cubit.isMale!
-                              ? defaultColor
-                              : cubit.isDark
-                                  ? Colors.black26
-                                  : Colors.grey.shade300
-                          : cubit.isDark
-                              ? Colors.black26
-                              : Colors.grey.shade300,
-                    ),
-                  ),
-                ],
-              );
-  }
-
-  Container buildHeightSlider(AppCubit cubit, BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: cubit.isDark ? Colors.black26 : Colors.grey.shade300,
-        borderRadius: BorderRadius.circular((20.0)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Height', style: Theme.of(context).textTheme.headline4),
-            const SizedBox(height: 4.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Text(
-                  cubit.heightValue.round().toString(),
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                Text('cm', style: Theme.of(context).textTheme.bodyText1),
-              ],
-            ),
-            const SizedBox(height: 4.0),
-            Slider(
-              value: cubit.heightValue,
-              min: 140.0,
-              max: 220.0,
-              onChanged: (value) {
-                cubit.changeHeightValue(value);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Row buildWeightAndHeight(BuildContext context, AppCubit cubit) {
-    return Row(
-      children: [
-        Expanded(
-          child: buildWeightAndAge(
-            context: context,
-            title: 'Weight',
-            number: cubit.weightValue.round(),
-            unit: 'Kg',
-            onPressedOnMinus: () {
-              cubit.minusWeightValue();
-            },
-            onPressedOnPlus: () {
-              cubit.addWeightValue();
-            },
-          ),
-        ),
-        const SizedBox(width: 20.0),
-        Expanded(
-          child: buildWeightAndAge(
-            context: context,
-            title: 'Age',
-            number: cubit.ageValue,
-            unit: 'yrs',
-            onPressedOnMinus: () {
-              cubit.minusAgeValue();
-            },
-            onPressedOnPlus: () {
-              cubit.addAgeValue();
-            },
-          ),
-        ),
-      ],
     );
   }
 }

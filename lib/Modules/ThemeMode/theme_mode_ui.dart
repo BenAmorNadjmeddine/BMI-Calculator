@@ -3,6 +3,8 @@ import 'package:bmi_calculator/Shared/Cubit/states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'ThemeModeUIComponents/icon_mode.dart';
+
 class ThemeModeUI extends StatelessWidget {
   const ThemeModeUI({Key? key}) : super(key: key);
 
@@ -24,34 +26,13 @@ class ThemeModeUI extends StatelessWidget {
                 children: [
                   const SizedBox(height: 20.0),
                   const CloseButton(),
-                  buildIconMode(cubit, context),
+                  IconMode(cubit: cubit, context: context),
                 ],
               ),
             ),
           ),
         );
       },
-    );
-  }
-
-  Expanded buildIconMode(AppCubit cubit, BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            cubit.isDark ? Icons.sunny : Icons.dark_mode,
-            size: 120.0,
-          ),
-          const SizedBox(height: 20.0),
-          Center(
-            child: Text(
-              cubit.isDark ? 'Light' : 'Dark',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-          )
-        ],
-      ),
     );
   }
 }
